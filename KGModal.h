@@ -34,6 +34,18 @@ typedef NS_ENUM(NSUInteger, KGModalCloseButtonType){
 // Defaults to YES
 @property (nonatomic) BOOL animateWhenDismissed;
 
+// Determines if the border around the modal is shown
+// Defaults to YES
+@property (nonatomic) BOOL showBorder;
+// Determines the width of the border
+// Defaults to 1
+@property (nonatomic) CGFloat borderWidth;
+
+// Determines the color of the border
+// Defaults to white
+@property (strong,nonatomic) UIColor * borderColor;
+
+
 // Determins close button type (None/Left/Right)
 // Defaults to Left
 @property (nonatomic) KGModalCloseButtonType closeButtonType;

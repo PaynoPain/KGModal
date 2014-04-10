@@ -27,6 +27,7 @@ NSString *const KGModalDidHideNotification = @"KGModalDidHideNotification";
 @interface KGModalContainerView : UIView
 @property (weak, nonatomic) CALayer *styleLayer;
 @property (strong, nonatomic) UIColor *modalBackgroundColor;
+- (instancetype)initWithFrame:(CGRect)frame showBorder:(BOOL) showBorder borderColor:(UIColor *) bColor borderWidth:(CGFloat )bWidth;
 @end
 
 @interface KGModalCloseButton : UIButton
@@ -67,6 +68,9 @@ NSString *const KGModalDidHideNotification = @"KGModalDidHideNotification";
     self.animateWhenDismissed = YES;
     self.closeButtonType = KGModalCloseButtonTypeLeft;
     self.modalBackgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+    self.borderColor = [UIColor whiteColor];
+    self.borderWidth = 1.0f;
+    self.showBorder = YES;
     
     return self;
 }
@@ -115,7 +119,7 @@ NSString *const KGModalDidHideNotification = @"KGModalDidHideNotification";
     containerViewRect.origin.x = containerViewRect.origin.y = 0;
     containerViewRect.origin.x = round(CGRectGetMidX(self.window.bounds)-CGRectGetMidX(containerViewRect));
     containerViewRect.origin.y = round(CGRectGetMidY(self.window.bounds)-CGRectGetMidY(containerViewRect));
-    KGModalContainerView *containerView = [[KGModalContainerView alloc] initWithFrame:containerViewRect];
+    KGModalContainerView *containerView = [[KGModalContainerView alloc] initWithFrame:containerViewRect showBorder:_showBorder borderColor:_borderColor borderWidth:_borderWidth];
     containerView.modalBackgroundColor = self.modalBackgroundColor;
     containerView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|
     UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
@@ -280,7 +284,7 @@ NSString *const KGModalDidHideNotification = @"KGModalDidHideNotification";
 
 @implementation KGModalContainerView
 
-- (instancetype)initWithFrame:(CGRect)frame{
+- (instancetype)initWithFrame:(CGRect)frame showBorder:(BOOL) showBorder borderColor:(UIColor *) bColor borderWidth:(CGFloat )bWidth{
     if(!(self = [super initWithFrame:frame])){
         return nil;
     }
@@ -290,8 +294,11 @@ NSString *const KGModalDidHideNotification = @"KGModalDidHideNotification";
     styleLayer.shadowColor= [[UIColor blackColor] CGColor];
     styleLayer.shadowOffset = CGSizeMake(0, 0);
     styleLayer.shadowOpacity = 0.5;
-    styleLayer.borderWidth = 1;
-    styleLayer.borderColor = [[UIColor whiteColor] CGColor];
+    if(showBorder){
+        styleLayer.borderWidth = bWidth;
+        styleLayer.borderColor = bColor.CGColor;
+    }
+
     styleLayer.frame = CGRectInset(self.bounds, 12, 12);
     [self.layer addSublayer:styleLayer];
     self.styleLayer = styleLayer;
